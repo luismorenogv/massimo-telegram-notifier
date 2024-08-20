@@ -71,17 +71,17 @@ async def revisar_disponibilidad():
             agotado = talla.find('div', {'data-title': 'dev.product.soldOut'})
             
             if nombre_talla == talla_objetivo:
-                print(f"Verificando la talla {nombre_talla}:")
+                print(f"Verifying size {nombre_talla}:")
                 if agotado:
-                    print(f"La talla {talla_objetivo} está agotada.")
+                    print(f"Size {talla_objetivo} is sold out.")
                 else:
                     # Telegram notification
-                    mensaje = f"¡La talla {talla_objetivo} está disponible! Compra aquí: {url}"
+                    mensaje = f"¡Size {talla_objetivo} is available! Buy here: {url}"
                     await bot.send_message(chat_id=CHAT_ID, text=mensaje)
                     print(mensaje)
                     return
     else:
-        print("El contenedor <ul> no se encontró en la página.")
+        print("<ul> container not found.")
 
 if __name__ == "__main__":
     asyncio.run(revisar_disponibilidad())
