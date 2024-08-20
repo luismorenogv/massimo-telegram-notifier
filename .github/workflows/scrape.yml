@@ -3,7 +3,7 @@ on:
   schedule:
     - cron: '0 * * * *'  # Execution each o'clock
 
-  # workflow_dispatch:  # Manual
+  workflow_dispatch:  # Manual
 
 jobs:
   scrape:
