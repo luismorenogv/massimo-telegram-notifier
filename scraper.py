@@ -54,25 +54,34 @@ async def revisar_disponibilidad():
     
     # Wait time simulating human behavior
     time.sleep(random.uniform(5, 15))  
-
     
     page_content = driver.page_source
     soup = BeautifulSoup(page_content, 'html.parser')
-    # print(f'This is the content: {soup}')
     
-    tallas = soup.find_all('li', {'class': 'product-size-selector__li'})
-    for talla in tallas:
-        nombre_talla = talla.find('span', {'class': 'product-size-selector-name'}).text.strip()
-        if nombre_talla == talla_objetivo:
+    # Obtain the <ul> container
+    contenedor_ul = soup.find('ul', class_='list-clear product-size-selector__ul content-center')
+    
+    # Ensure the container is found
+    if contenedor_ul:
+        # Now find all <li> with class 'product-size-selector__li' within the <ul> container
+        tallas = contenedor_ul.find_all('li', class_='product-size-selector__li')
+        
+        for talla in tallas:
+            nombre_talla = talla.find('span', class_='product-size-selector-name').text.strip()
             agotado = talla.find('div', {'data-title': 'dev.product.soldOut'})
-            if agotado:
-                print(f"La talla {talla_objetivo} está agotada.")
-            else:
-                # Telegram notification
-                mensaje = f"¡La talla {talla_objetivo} está disponible! Compra aquí: {url}"
-                await bot.send_message(chat_id=CHAT_ID, text=mensaje)
-                print(mensaje)
-                return
+            
+            if nombre_talla == talla_objetivo:
+                print(f"Verificando la talla {nombre_talla}:")
+                if agotado:
+                    print(f"La talla {talla_objetivo} está agotada.")
+                else:
+                    # Telegram notification
+                    mensaje = f"¡La talla {talla_objetivo} está disponible! Compra aquí: {url}"
+                    await bot.send_message(chat_id=CHAT_ID, text=mensaje)
+                    print(mensaje)
+                    return
+    else:
+        print("El contenedor <ul> no se encontró en la página.")
 
 if __name__ == "__main__":
     asyncio.run(revisar_disponibilidad())
