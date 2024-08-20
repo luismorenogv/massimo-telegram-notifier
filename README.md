@@ -53,7 +53,7 @@ The web scraping functionality is easily modifiable to adapt to other websites.
     CHAT_ID = 'your_chat_id_here'  # e.g. -1001234567890
 
     # URL of desired product
-    url = 'https://www.massimo-dutti.com/product-page'
+    url = 'https://www.massimodutti.com/product-page'
 
     # Desired size
     desired_size = '42'  # e.g. 'XL', '48'...
@@ -63,8 +63,14 @@ The web scraping functionality is easily modifiable to adapt to other websites.
    - After editing the `config.py` file, scroll down and write a brief commit message.
    - Click the "Commit changes" button to save your changes directly to your forked repository.
 
-4. **GitHub Actions Setup**
-   - The project is preconfigured to run the scraping script every hour using GitHub Actions.
+4. **Enabling the Workflow**
+
+   If you fork this repository, the GitHub Actions workflow will be disabled by default. To enable it:
+
+   - Go to the "Actions" tab in your forked repository.
+   - You will see a message indicating that workflows are disabled.
+   - Click the "enable Workflow" button.
+   - The workflow will now be enabled, and you can run it manually or let it run according to the schedule.
 
 ## License
 
