@@ -66,9 +66,6 @@ The web scraping functionality is easily modifiable to adapt to other websites.
 4. **GitHub Actions Setup**
    - The project is preconfigured to run the scraping script every hour using GitHub Actions.
 
-### License and Contributing
-
-```markdown
 ## License
 
 This project is licensed under the MIT License. See the `LICENSE` file for more details.
