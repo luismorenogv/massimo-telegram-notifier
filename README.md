@@ -27,10 +27,10 @@ The web scraping functionality is easily modifiable to adapt to other websites.
 
 4. **Obtain the Group Chat ID:**
    - Send any message in the group.
-   - Use the following URL in your browser to get the updates:
+   - Use the following URL in your browser to get the updates replacing <YOUR_BOT_TOKEN>:
 
      ```
-     https://api.telegram.org/botYOUR_BOT_TOKEN/getUpdates
+     https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getUpdates
      ```
 
    - Look for the `"chat"` object in the returned JSON. The `"id"` field will be your Group Chat ID.
