@@ -62,12 +62,11 @@ async def revisar_disponibilidad(url, desired_size):
         
         for talla in tallas:
             nombre_talla = talla.find('span', class_='product-size-selector-name').text.strip()
-            agotado = talla.find('div', {'data-title': 'dev.product.soldOut'})
             
             if nombre_talla == desired_size:
-                print(f"Verifying size {nombre_talla}:")
+                agotado = talla.find('div', {'data-title': 'dev.product.soldOut'})
                 if agotado:
-                    print(f"Size {desired_size} is sold out.")
+                    print(f"Size {desired_size} for {url} is sold out.")
                 else:
                     # Telegram notification
                     mensaje = f"¡Size {desired_size} is available! Buy here: {url}"
