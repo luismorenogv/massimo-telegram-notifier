@@ -1,6 +1,6 @@
 # Massimo Telegram Notifier
 
-Massimo Telegram Notifier is a Python-based project that allows you to monitor a specific product's availability on Massimo Dutti's website. When the desired product size becomes available, the script sends a notification to a specified Telegram chat.
+Massimo Telegram Notifier is a Python-based project that allows you to monitor one or more specific product's availability on Massimo Dutti's website. When the desired product size becomes available, the script sends a notification to a specified Telegram chat.
 
 The script bypasses the website's anti-bot measures and works with GitHub Actions to execute hourly checks.
 
