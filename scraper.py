@@ -43,17 +43,11 @@ stealth(driver,
         fix_hairline=True,
         )
 
-# URL of desired product
-url = config.url
-
-# Desired size
-talla_objetivo = config.desired_size
-
-async def revisar_disponibilidad():
+async def revisar_disponibilidad(url, desired_size):
     driver.get(url)
     
     # Wait time simulating human behavior
-    time.sleep(random.uniform(5, 15))  
+    time.sleep(random.uniform(3, 8))  
     
     page_content = driver.page_source
     soup = BeautifulSoup(page_content, 'html.parser')
@@ -70,19 +64,27 @@ async def revisar_disponibilidad():
             nombre_talla = talla.find('span', class_='product-size-selector-name').text.strip()
             agotado = talla.find('div', {'data-title': 'dev.product.soldOut'})
             
-            if nombre_talla == talla_objetivo:
+            if nombre_talla == desired_size:
                 print(f"Verifying size {nombre_talla}:")
                 if agotado:
-                    print(f"Size {talla_objetivo} is sold out.")
+                    print(f"Size {desired_size} is sold out.")
                 else:
                     # Telegram notification
-                    mensaje = f"¡Size {talla_objetivo} is available! Buy here: {url}"
+                    mensaje = f"¡Size {desired_size} is available! Buy here: {url}"
                     await bot.send_message(chat_id=CHAT_ID, text=mensaje)
                     print(mensaje)
                     return
     else:
         print("<ul> container not found.")
 
+async def main(urls, desired_sizes):
+    tasks = []
+    for url, size in zip(urls, desired_sizes):
+        tasks.append(revisar_disponibilidad(url, size))
+    
+    await asyncio.gather(*tasks)
+
 if __name__ == "__main__":
-    asyncio.run(revisar_disponibilidad())
+    asyncio.run(main(config.urls, config.desired_sizes))
     driver.quit()
+
