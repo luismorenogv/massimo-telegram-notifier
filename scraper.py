@@ -53,25 +53,25 @@ async def revisar_disponibilidad(url, desired_size):
     soup = BeautifulSoup(page_content, 'html.parser')
     
     # Obtain the <ul> container
-    contenedor_ul = soup.find('ul', class_='list-clear product-size-selector__ul content-center')
+    container_ul = soup.find('ul', class_='list-clear product-size-selector__ul content-center')
     
     # Ensure the container is found
-    if contenedor_ul:
+    if container_ul:
         # Now find all <li> with class 'product-size-selector__li' within the <ul> container
-        tallas = contenedor_ul.find_all('li', class_='product-size-selector__li')
+        sizes = contenedor_ul.find_all('li', class_='product-size-selector__li')
         
-        for talla in tallas:
-            nombre_talla = talla.find('span', class_='product-size-selector-name').text.strip()
+        for size in sizes:
+            size_name = size.find('span', class_='product-size-selector-name').text.strip()
             
-            if nombre_talla == desired_size:
-                agotado = talla.find('div', {'data-title': 'dev.product.soldOut'})
-                if agotado:
+            if size_name == desired_size:
+                sold_out = size.find('div', {'data-title': 'dev.product.soldOut'})
+                if sold_out:
                     print(f"Size {desired_size} for {url} is sold out.")
                 else:
                     # Telegram notification
-                    mensaje = f"¡Size {desired_size} is available! Buy here: {url}"
+                    msg = f"¡Size {desired_size} is available! Buy here: {url}"
                     await bot.send_message(chat_id=CHAT_ID, text=mensaje)
-                    print(mensaje)
+                    print(msg)
                     return
     else:
         print("<ul> container not found.")
