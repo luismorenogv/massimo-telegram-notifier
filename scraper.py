@@ -58,7 +58,7 @@ async def revisar_disponibilidad(url, desired_size):
     # Ensure the container is found
     if container_ul:
         # Now find all <li> with class 'product-size-selector__li' within the <ul> container
-        sizes = contenedor_ul.find_all('li', class_='product-size-selector__li')
+        sizes = container_ul.find_all('li', class_='product-size-selector__li')
         
         for size in sizes:
             size_name = size.find('span', class_='product-size-selector-name').text.strip()
@@ -70,7 +70,7 @@ async def revisar_disponibilidad(url, desired_size):
                 else:
                     # Telegram notification
                     msg = f"¡Size {desired_size} is available! Buy here: {url}"
-                    await bot.send_message(chat_id=CHAT_ID, text=mensaje)
+                    await bot.send_message(chat_id=CHAT_ID, text=msg)
                     print(msg)
                     return
     else:
@@ -82,8 +82,8 @@ async def main(urls, desired_sizes):
         tasks.append(revisar_disponibilidad(url, size))
     
     await asyncio.gather(*tasks)
+    driver.quit()
 
 if __name__ == "__main__":
     asyncio.run(main(config.urls, config.desired_sizes))
-    driver.quit()
 
