@@ -27,7 +27,7 @@ The web scraping functionality is easily modifiable to adapt to other websites.
 
 4. **Obtain the Group Chat ID:**
    - Send any message in the group.
-   - Use the following URL in your browser to get the updates replacing <YOUR_BOT_TOKEN>:
+   - Use the following URL in your browser to get the updates replacing `<YOUR_BOT_TOKEN>`:
 
      ```
      https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getUpdates
@@ -43,7 +43,7 @@ The web scraping functionality is easily modifiable to adapt to other websites.
 2. **Edit the `config.py` File**
    - Navigate to the `config.py` file in your forked repository on GitHub.
    - Click the pencil icon to edit the file.
-   - Replace the placeholder values with your actual Telegram bot token, chat ID, product URL, and desired product size.
+   - Replace the placeholder values with your actual Telegram bot token, chat ID, product URLS, and desired product sizes for each.
 
     ```python
     # config.py
@@ -53,10 +53,13 @@ The web scraping functionality is easily modifiable to adapt to other websites.
     CHAT_ID = 'your_chat_id_here'  # e.g. -1001234567890
 
     # URL of desired product
-    url = 'https://www.massimodutti.com/product-page'
+    url = [
+          'https://www.massimodutti.com/product-page1',
+          'https://www.massimodutti.com/product-page2'
+    ]
 
     # Desired size
-    desired_size = '42'  # e.g. 'XL', '48'...
+    desired_size = ['42', 'XL']
     ```
 
 3. **Commit Your Changes**
@@ -69,7 +72,7 @@ The web scraping functionality is easily modifiable to adapt to other websites.
 
    - Go to the "Actions" tab in your forked repository.
    - You will see a message indicating that workflows are disabled.
-   - Click the "enable Workflow" button.
+   - Click the "Enable Workflow" button.
    - The workflow will now be enabled, and you can run it manually or let it run according to the schedule.
 
 ## License
@@ -81,5 +84,6 @@ This project is licensed under the MIT License. See the `LICENSE` file for more 
 Contributions are welcome! Feel free to submit a pull request or open an issue to discuss improvements.
 
 If you find this project helpful, please consider giving it a ⭐! :)
+
 
 
