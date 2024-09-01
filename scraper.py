@@ -46,14 +46,18 @@ stealth(driver,
 async def revisar_disponibilidad(url, desired_size):
     driver.get(url)
     
-    # Wait time simulating human behavior
-    time.sleep(random.uniform(3, 8))  
+    # Wait time simulating human behavior and letting page items load
+    time.sleep(random.uniform(1, 3))  
     
     page_content = driver.page_source
     soup = BeautifulSoup(page_content, 'html.parser')
     
     # Obtain the <ul> container
     container_ul = soup.find('ul', class_='list-clear product-size-selector__ul content-center')
+
+    # Obtain title
+    title = soup.find('h1', class_='product-name title-l mb-4 ttu')
+    if title: title = title.text.strip()
     
     # Ensure the container is found
     if container_ul:
@@ -66,10 +70,10 @@ async def revisar_disponibilidad(url, desired_size):
             if size_name == desired_size:
                 sold_out = size.find('div', {'data-title': 'dev.product.soldOut'})
                 if sold_out:
-                    print(f"Size {desired_size} for {url} is sold out.")
+                    print(f"Size {desired_size} for {title} is sold out.")
                 else:
                     # Telegram notification
-                    msg = f"¡Size {desired_size} is available! Buy here: {url}"
+                    msg = f"¡Size {desired_size} for {title} is available! Buy here: {url}"
                     await bot.send_message(chat_id=CHAT_ID, text=msg)
                     print(msg)
                     return
