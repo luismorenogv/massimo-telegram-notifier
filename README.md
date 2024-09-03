@@ -12,7 +12,6 @@ The script works in conjunction with GitHub Actions to perform hourly checks and
 
 ## Requirements
 
-- Python 3.x
 - A Telegram bot token and chat ID.
 
 ### Obtaining the Telegram Bot Token and Chat ID
