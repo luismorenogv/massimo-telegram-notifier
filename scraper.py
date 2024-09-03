@@ -9,6 +9,13 @@ import telegram
 import time
 import random
 import config
+import logging
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+# Set up logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Bot telegram configuration
 TOKEN = config.TOKEN
@@ -31,63 +38,57 @@ options = [
 for option in options:
     chrome_options.add_argument(option)
 
-driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
-
-# Selenium Stealth
-stealth(driver,
-        languages=["en-US", "en"],
-        vendor="Google Inc.",
-        platform="Win32",
-        webgl_vendor="Intel Inc.",
-        renderer="Intel Iris OpenGL Engine",
-        fix_hairline=True,
-        )
-
 async def revisar_disponibilidad(url, desired_size):
-    driver.get(url)
-    
-    # Wait time simulating human behavior and letting page items load
-    time.sleep(random.uniform(1, 3))  
-    
-    page_content = driver.page_source
-    soup = BeautifulSoup(page_content, 'html.parser')
-    
-    # Obtain the <ul> container
-    container_ul = soup.find('ul', class_='list-clear product-size-selector__ul content-center')
-
-    # Obtain title
-    title = soup.find('h1', class_='product-name title-l mb-4 ttu')
-    if title: title = title.text.strip()
-    
-    # Ensure the container is found
-    if container_ul:
-        # Now find all <li> with class 'product-size-selector__li' within the <ul> container
-        sizes = container_ul.find_all('li', class_='product-size-selector__li')
+    with webdriver.Chrome(service=chrome_service, options=chrome_options) as driver:
+        stealth(driver,
+                languages=["en-US", "en"],
+                vendor="Google Inc.",
+                platform="Win32",
+                webgl_vendor="Intel Inc.",
+                renderer="Intel Iris OpenGL Engine",
+                fix_hairline=True,
+                )
         
-        for size in sizes:
-            size_name = size.find('span', class_='product-size-selector-name').text.strip()
-            
-            if size_name == desired_size:
-                sold_out = size.find('div', {'data-title': 'dev.product.soldOut'})
-                if sold_out:
-                    print(f"Size {desired_size} for {title} is sold out.")
-                else:
-                    # Telegram notification
-                    msg = f"¡Size {desired_size} for {title} is available! Buy here: {url}"
-                    await bot.send_message(chat_id=CHAT_ID, text=msg)
-                    print(msg)
-                    return
-    else:
-        print("<ul> container not found.")
+        try:
+            driver.get(url)
+            logging.info(f"Fetching URL: {url}")
 
-async def main(urls, desired_sizes):
-    tasks = []
-    for url, size in zip(urls, desired_sizes):
-        tasks.append(revisar_disponibilidad(url, size))
-    
+            # Explicit wait instead of sleep
+            WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.CLASS_NAME, 'product-size-selector__ul'))
+            )
+
+            page_content = driver.page_source
+            soup = BeautifulSoup(page_content, 'html.parser')
+
+            container_ul = soup.find('ul', class_='list-clear product-size-selector__ul content-center')
+            title = soup.find('h1', class_='product-name title-l mb-4 ttu')
+            if title:
+                title = title.text.strip()
+
+            if container_ul:
+                sizes = container_ul.find_all('li', class_='product-size-selector__li')
+                for size in sizes:
+                    size_name = size.find('span', class_='product-size-selector-name').text.strip()
+                    if size_name == desired_size:
+                        sold_out = size.find('div', {'data-title': 'dev.product.soldOut'})
+                        if sold_out:
+                            logging.info(f"Size {desired_size} for {title} is sold out.")
+                        else:
+                            msg = f"¡Size {desired_size} for {title} is available! Buy here: {url}"
+                            await bot.send_message(chat_id=CHAT_ID, text=msg)
+                            logging.info(f"Sent message: {msg}")
+                        return
+            else:
+                logging.warning("<ul> container not found.")
+        except Exception as e:
+            logging.error(f"An error occurred: {e}")
+
+async def main(items):
+    tasks = [revisar_disponibilidad(item[0], item[1]) for item in items]
     await asyncio.gather(*tasks)
-    driver.quit()
 
 if __name__ == "__main__":
-    asyncio.run(main(config.urls, config.desired_sizes))
+    asyncio.run(main(config.items))
+
 
