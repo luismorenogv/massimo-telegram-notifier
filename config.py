@@ -4,12 +4,11 @@
 TOKEN = 'your_telegram_bot_token_here'
 CHAT_ID = 'your_chat_id_here'
 
-# URLs of desired products
-urls = [
-    'https://www.massimodutty.com/product-page1', 
-    'https://www.massimodutty.com/product-page2'
+# Combined list of URLs and desired sizes
+items = [
+    ('https://www.massimodutty.com/product-page1', '42'),
+    ('https://www.massimodutty.com/product-page2', 'XL'),
+    # Add more items as needed
 ]
 
-# Desired sizes corresponding to the URLs
-desired_sizes = ['42', 'XL']
 
