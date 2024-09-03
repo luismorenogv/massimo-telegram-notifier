@@ -1,13 +1,18 @@
 # Massimo Telegram Notifier
 
-Massimo Telegram Notifier is a Python-based project that allows you to monitor one or more specific product's availability on Massimo Dutti's website. When the desired product size becomes available, the script sends a notification to a specified Telegram chat.
+**Massimo Telegram Notifier** is a Python-based project that allows you to monitor the availability of specific products on Massimo Dutti's website. When the desired product size becomes available, the script sends a notification to a specified Telegram chat using a bot.
 
-The script bypasses the website's anti-bot measures and works with GitHub Actions to execute hourly checks.
+The script works in conjunction with GitHub Actions to perform hourly checks and can be modified to work with other websites by adjusting the web scraping logic.
 
-The web scraping functionality is easily modifiable to adapt to other websites.
+## Features
+
+- Automated hourly checks for product availability on Massimo Dutti.
+- Sends instant notifications to a Telegram chat when the desired size becomes available.
+- Easily configurable and adaptable to other websites.
 
 ## Requirements
 
+- Python 3.x
 - A Telegram bot token and chat ID.
 
 ### Obtaining the Telegram Bot Token and Chat ID
@@ -27,7 +32,7 @@ The web scraping functionality is easily modifiable to adapt to other websites.
 
 4. **Obtain the Group Chat ID:**
    - Send any message in the group.
-   - Use the following URL in your browser to get the updates replacing `<YOUR_BOT_TOKEN>`:
+   - Use the following URL in your browser to get the updates, replacing `<YOUR_BOT_TOKEN>`:
 
      ```
      https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getUpdates
@@ -37,36 +42,33 @@ The web scraping functionality is easily modifiable to adapt to other websites.
 
 ## Setup and Configuration
 
-1. **Fork the Repository**
+1. **Fork the Repository:**
    - Fork this repository to your GitHub account.
 
-2. **Edit the `config.py` File**
+2. **Edit the `config.py` File:**
    - Navigate to the `config.py` file in your forked repository on GitHub.
    - Click the pencil icon to edit the file.
-   - Replace the placeholder values with your actual Telegram bot token, chat ID, product URLS, and desired product sizes for each.
+   - Replace the placeholder values with your actual Telegram bot token, chat ID, product URLs, and desired product sizes.
 
     ```python
     # config.py
 
     # Bot telegram configuration
-    TOKEN = 'your_telegram_bot_token_here'  # e.g. '123456789:ABCdefGhIJKlmnoPQRstuVWxYZ'
-    CHAT_ID = 'your_chat_id_here'  # e.g. -1001234567890
+    TOKEN = 'your_telegram_bot_token_here'  # e.g., '123456789:ABCdefGhIJKlmnoPQRstuVWxYZ'
+    CHAT_ID = 'your_chat_id_here'  # e.g., -1001234567890
 
-    # URL of desired product
-    url = [
-          'https://www.massimodutti.com/product-page1',
-          'https://www.massimodutti.com/product-page2'
+    # List of desired products and sizes
+    items = [
+        ('https://www.massimodutti.com/product-page1', '42'),
+        ('https://www.massimodutti.com/product-page2', 'XL')
     ]
-
-    # Desired size
-    desired_size = ['42', 'XL']
     ```
 
-3. **Commit Your Changes**
-   - After editing the `config.py` file, scroll down and write a brief commit message.
-   - Click the "Commit changes" button to save your changes directly to your forked repository.
+3. **Commit Your Changes:**
+   - After editing the `config.py` file, scroll down to the commit message box.
+   - Write a brief commit message and click the "Commit changes" button to save your modifications to your forked repository.
 
-4. **Enabling the Workflow**
+4. **Enabling the Workflow:**
 
    If you fork this repository, the GitHub Actions workflow will be disabled by default. To enable it:
 
